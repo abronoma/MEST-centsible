@@ -26,7 +26,6 @@ export const getAllTransactions = async (req, res, next) => {
     const { filter = "{}", sort = '{"date": -1}', limit = 10 } = req.query;
 
     const transactions = await TransactionModel.find({
-      user: userId,
       ...JSON.parse(filter),
     })
       .sort(JSON.parse(sort))
