@@ -23,11 +23,6 @@ export const createTransaction = async (req, res, next) => {
 
 export const getAllTransactions = async (req, res, next) => {
   try {
-    const userId = req.auth?.id;
-    if (!userId) {
-      return res.status(401).json({ message: "Unauthorized: Missing user ID" });
-    }
-
     const { filter = "{}", sort = '{"date": -1}', limit = 10 } = req.query;
 
     const transactions = await TransactionModel.find({
