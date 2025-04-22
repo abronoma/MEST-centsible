@@ -11,7 +11,6 @@ userRouter.post(
   profilePicture.single("profilePicture"),
   registerUser
 );
-
 //login user
 userRouter.post("/user/login", loginUser);
 

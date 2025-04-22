@@ -13,9 +13,9 @@ const transactionRouter = Router();
 
 transactionRouter.post("/transaction", isAuthenticated,  createTransaction);
 
-transactionRouter.get("/transactions", isAuthenticated, getAllTransactions);
+transactionRouter.get("/transactions", getAllTransactions);
 
-transactionRouter.get("/transaction/:id", isAuthenticated, getTransactionById);
+transactionRouter.get("/transaction/:id", getTransactionById);
 
 transactionRouter.put("/transaction/:id", isAuthenticated, updateTransaction);
 
