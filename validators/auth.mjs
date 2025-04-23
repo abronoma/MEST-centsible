@@ -15,6 +15,6 @@ export const loginUserValidator = Joi.object({
 
 export const updateUserValidator = Joi.object({
   username: Joi.string().required(),
-  email: Joi.string().required(),
-  profilePicture: Joi.string(),
+  email: Joi.string().email(),
+  profilePicture: Joi.string().allow(""),
 });

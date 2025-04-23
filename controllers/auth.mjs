@@ -69,32 +69,42 @@ export const updateUser = async (req, res, next) => {
   try {
     const { error, value } = updateUserValidator.validate({
       ...req.body,
-      profilePicture: req.file?.filename,
+      profilePicture: req.file?.filename || "",
     });
-    
-    if (error) return res.status(422).json(error);
-
+    if (error) {
+      return res.status(422).json({
+        message: "Validation failed",
+        details: error.details,
+      });
+    }
     const updatedUser = await userModel.findByIdAndUpdate(
       req.params.id,
       value,
       { new: true }
     );
-
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
     return res.status(200).json(updatedUser);
   } catch (error) {
     next(error);
   }
 };
 
-
 export const getAuthenticatedUser = async (req, res, next) => {
   try {
-    const result = await userModel
-      .findById(req.auth.id)
-      .select({ password: false });
-    res.status(200).json(result);
+    const user = await userModel.findById(req.auth.id).select("-password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({
+      username: user.username,
+      email: user.email,
+      profilePicture: user.profilePicture || "",
+    });
   } catch (error) {
     next(error);
   }
-}
-  
+};
