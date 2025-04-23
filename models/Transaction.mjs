@@ -9,11 +9,16 @@ const transactionSchema = new Schema(
       ref: "User",
       required: true,
     },
-    title: {
+    description: {
       type: String,
       required: true,
       trim: true,
     },
+
+  currency: {
+      type: String,
+      required: true,
+  },
     amount: {
       type: Number,
       required: true,
@@ -30,10 +35,6 @@ const transactionSchema = new Schema(
     date: {
       type: Date,
       default: Date.now,
-    },
-    description: {
-      type: String,
-      trim: true,
     },
   },
   { timestamps: true }

@@ -4,13 +4,12 @@ import { transactionValidator } from "../validators/transaction.mjs";
 // Create a new transaction
 export const createTransaction = async (req, res, next) => {
   try {
-    console.log("User in request:", req.user);
     const { error, value } = transactionValidator.validate(req.body);
     if (error) return res.status(422).json(error);
 
     const newTransaction = await TransactionModel.create({
       ...value,
-      user: req.auth.id
+      user: req.auth.id,
     });
     return res.status(201).json({
       message: "Transaction created successfully",
@@ -37,23 +36,24 @@ export const getAllTransactions = async (req, res, next) => {
   }
 };
 
-
-
 // Get a single transaction by ID
 export const getTransactionById = async (req, res, next) => {
   try {
     const transaction = await TransactionModel.findOne({
       _id: req.params.id,
-      user: req.auth.id,
+      user: req.auth.id, 
     });
-    if (!transaction)
+
+    if (!transaction) {
       return res.status(404).json({ message: "Transaction not found" });
+    }
 
     res.status(200).json(transaction);
   } catch (error) {
     next(error);
   }
 };
+
 
 // Update a transaction
 export const updateTransaction = async (req, res, next) => {

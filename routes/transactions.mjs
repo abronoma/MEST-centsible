@@ -7,7 +7,7 @@ import {
   deleteTransaction,
 } from "../controllers/transactions.mjs";
 
-import { isAuthenticated } from "../middlewares/auth.mjs";
+import { isAuthenticated, isAuthorized } from "../middlewares/auth.mjs";
 
 const transactionRouter = Router();
 
@@ -15,7 +15,7 @@ transactionRouter.post("/transaction", isAuthenticated,  createTransaction);
 
 transactionRouter.get("/transactions",  getAllTransactions);
 
-transactionRouter.get("/transaction/:id", getTransactionById);
+transactionRouter.get("/transaction/:id", isAuthenticated, getTransactionById);
 
 transactionRouter.put("/transaction/:id", isAuthenticated, updateTransaction);
 

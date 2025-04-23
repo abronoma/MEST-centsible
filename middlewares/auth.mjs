@@ -4,6 +4,7 @@ import { userModel } from "../models/User.mjs";
 export const isAuthenticated = expressjwt({
   secret: process.env.JWT_SECRET_KEY,
   algorithms: ["HS256"],
+  requestProperty: "auth",
 });
 
 export const isAuthorized = async (req, res, next) => {
@@ -22,4 +23,3 @@ export const isAuthorized = async (req, res, next) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-

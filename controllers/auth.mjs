@@ -10,10 +10,7 @@ import { sendEmail } from "../utilities/mailing.mjs";
 
 export const registerUser = async (req, res, next) => {
   try {
-    const { error, value } = registerUserValidator.validate({
-      ...req.body,
-      profilePicture: req.file?.filename,
-    });
+    const { error, value } = registerUserValidator.validate(req.body);
     if (error) return res.status(422).json(error);
 
     const existingUser = await userModel.findOne({
@@ -54,7 +51,7 @@ export const loginUser = async (req, res, next) => {
     const isMatch = bcrypt.compareSync(value.password, user.password);
     if (!isMatch) return res.status(401).json("Invalid credentials");
 
-    const accessToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, {
+    const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
       expiresIn: "24h",
     });
 
@@ -70,7 +67,11 @@ export const loginUser = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   try {
-    const { error, value } = updateUserValidator.validate(req.body);
+    const { error, value } = updateUserValidator.validate({
+      ...req.body,
+      profilePicture: req.file?.filename,
+    });
+    
     if (error) return res.status(422).json(error);
 
     const updatedUser = await userModel.findByIdAndUpdate(
@@ -84,3 +85,16 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const getAuthenticatedUser = async (req, res, next) => {
+  try {
+    const result = await userModel
+      .findById(req.auth.id)
+      .select({ password: false });
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
+  }
+}
+  
