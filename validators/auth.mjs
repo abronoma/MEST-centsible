@@ -9,13 +9,13 @@ export const registerUserValidator = Joi.object({
 }).with("password", "confirmPassword");
 
 export const loginUserValidator = Joi.object({
-  username: Joi.string().optional(),
   email: Joi.string().required(),
   password: Joi.string().required(),
 });
 
 export const updateUserValidator = Joi.object({
-  username: Joi.string().required(),
+  firstname: Joi.string(),
+  lastname: Joi.string(),
   email: Joi.string().email(),
   profilePicture: Joi.string().allow(""),
 });
