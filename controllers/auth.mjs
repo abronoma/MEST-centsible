@@ -14,7 +14,7 @@ export const registerUser = async (req, res, next) => {
     if (error) return res.status(422).json(error);
 
     const existingUser = await userModel.findOne({
-      $or: [{ username: value.username }, { email: value.email }],
+       email: value.email 
     });
     if (existingUser) return res.status(409).json("User already exists");
 
@@ -25,17 +25,22 @@ export const registerUser = async (req, res, next) => {
       password: hashedPassword,
     });
 
-    await sendEmail(
-      newUser.email,
-      "Welcome to Centsible",
-      `Hello ${newUser.username}, thanks for signing up!`
-    );
+    try {
+      await sendEmail(
+        newUser.email,
+        "Welcome to Centsible",
+        `Hello ${newUser.username}, thanks for signing up!`
+      );
+    } catch (emailErr) {
+      console.error("Failed to send welcome email:", emailErr);
+    }
 
     return res.status(201).json({
       message: "User created successfully",
       data: newUser,
     });
   } catch (error) {
+    console.log("registration error", error)
     next(error);
   }
 };
