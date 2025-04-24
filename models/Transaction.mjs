@@ -15,10 +15,10 @@ const transactionSchema = new Schema(
       trim: true,
     },
 
-  currency: {
+    currency: {
       type: String,
       required: true,
-  },
+    },
     amount: {
       type: Number,
       required: true,
@@ -34,7 +34,7 @@ const transactionSchema = new Schema(
     },
     date: {
       type: Date,
-      default: Date.now,
+      default: Date.Number
     },
   },
   { timestamps: true }

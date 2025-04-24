@@ -20,11 +20,13 @@ export const createTransaction = async (req, res, next) => {
   }
 };
 
+
 export const getAllTransactions = async (req, res, next) => {
   try {
     const { filter = "{}", sort = '{"date": -1}', limit = 10 } = req.query;
 
     const transactions = await TransactionModel.find({
+      user: req.auth.id, 
       ...JSON.parse(filter),
     })
       .sort(JSON.parse(sort))
@@ -35,6 +37,7 @@ export const getAllTransactions = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // Get a single transaction by ID
 export const getTransactionById = async (req, res, next) => {
