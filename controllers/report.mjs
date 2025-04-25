@@ -1,7 +1,7 @@
 import { mongoose, Types } from "mongoose";
 import { TransactionModel } from "../models/Transaction.mjs";
 
-// Calculate total income for a user
+// Income Balance
 export const calculateTotalIncome = async (req, res, next) => {
   const incomeTransactions = await TransactionModel.find({
     user: req.auth.id,
@@ -10,8 +10,6 @@ export const calculateTotalIncome = async (req, res, next) => {
 
   return incomeTransactions.reduce((sum, txn) => sum + txn.amount, 0);
 };
-
-// Calculate total expenses for a user
 export const calculateTotalExpenses = async (req, res, next) => {
   const expenseTransactions = await TransactionModel.find({
     user: req.auth.id,
@@ -20,15 +18,13 @@ export const calculateTotalExpenses = async (req, res, next) => {
 
   return expenseTransactions.reduce((sum, txn) => sum + txn.amount, 0);
 };
-
-// Calculate remaining balance (Income - Expenses)
 export const calculateRemainingBalance = async (req, res, next) => {
   const income = await calculateTotalIncome(userId);
   const expenses = await calculateTotalExpenses(userId);
   return income - expenses;
 };
 
-//simplied category in pie chart
+//Pie Chart
 export const getCategoryChartData = async (req, res, next) => {
   try {
     const userId = req.auth.id;
@@ -48,7 +44,7 @@ export const getCategoryChartData = async (req, res, next) => {
     console.log(incomeResult);
     const totalIncome = incomeResult[0]?.totalIncome || 0;
 
-    // Step 2: Get expenses grouped by category
+    // grouped expense based on category
     const expenseByCategory = await TransactionModel.aggregate([
       { $match: { user: userObjectId, type: "expense" } },
       {
@@ -60,7 +56,7 @@ export const getCategoryChartData = async (req, res, next) => {
     ]);
     console.log(expenseByCategory);
 
-    // Step 3: Calculate percentage based on total income
+    // percentage based on total income
     const result = expenseByCategory.map((item) => ({
       category: item.id,
       amount: item.total,
@@ -75,7 +71,8 @@ export const getCategoryChartData = async (req, res, next) => {
   }
 };
 
-//simplified expense chart for the month
+
+//Bar Chart
 export const getMonthlyChartData = async (req, res, next) => {
   try {
     const data = await TransactionModel.aggregate([

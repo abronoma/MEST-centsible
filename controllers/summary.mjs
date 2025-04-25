@@ -1,9 +1,12 @@
-
-import { calculateTotalIncome, calculateTotalExpenses, calculateRemainingBalance } from '../utilities/summary.mjs'
+import {
+  calculateTotalIncome,
+  calculateTotalExpenses,
+  calculateRemainingBalance,
+} from "./report.mjs";
 
 export const getSummary = async (req, res, next) => {
   try {
-    const userId = req.auth.id;  
+    const userId = req.auth.id;
 
     const totalIncome = await calculateTotalIncome(userId);
     const totalExpenses = await calculateTotalExpenses(userId);
@@ -15,6 +18,6 @@ export const getSummary = async (req, res, next) => {
       remainingBalance,
     });
   } catch (error) {
-    next(error);  
+    next(error);
   }
 };
