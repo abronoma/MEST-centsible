@@ -51,9 +51,9 @@ export const getDashboardData = async (req, res) => {
       },
       spendingByCategory: expenseByCategory.map((item) => ({
         name: item._id,
-        value: item.total
-          ? ((item.total / totalExpenses) * 100).toFixed(2)
-          : "0.00",
+        value: parseFloat(
+          item.total ? ((item.total / totalExpenses) * 100).toFixed(2) : "0.00"
+        ),
         currency: item.total,
         // category: item._id,
         // amount: item.total,
