@@ -105,7 +105,8 @@ export const getAuthenticatedUser = async (req, res, next) => {
     }
 
     res.status(200).json({
-      username: user.username,
+      firstname: user.firstname,
+      lastname: user.lastname,
       email: user.email,
       profilePicture: user.profilePicture || "",
     });
